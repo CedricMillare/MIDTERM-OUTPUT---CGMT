@@ -66,7 +66,7 @@ class Character {
       alert(`${this.name} leveled up! Now Level ${this.level}`);
     }
   }
-
+  // Attack Function for Player and Enemy
   attack(target) {
     let damage = 20 + this.level * 8;
 
@@ -74,11 +74,13 @@ class Character {
       damage += 20;
       this.rage--;
     }
-
+   // Damage Reduction when using Shield
     damage = applyShield(target, damage);
     target.health = Math.max(0, target.health - damage);
 
     this.mana = Math.min(this.mana + 15, this.maxMana);
+
+   // Recently Added for defeated enemy or player display
 
     alert(`${this.name} attacks ${target.name}! (${target.health} HP left)`);
     if (target.health <= 0) {
@@ -120,7 +122,7 @@ class Character {
         break;
     }
   }
-
+ // Health and Mana Potion Logic for Heroes
   usePotion() {
     if (this.potions <= 0) return alert("No HP potions!");
     this.potions--;
@@ -136,7 +138,7 @@ class Character {
   }
 }
 
-// EFFECTS
+// STATUS EFFECTS
 function applyShield(target, damage) {
   if (target.shield > 0) {
     let absorbed = Math.min(target.shield, damage);
@@ -199,7 +201,7 @@ function spawnBoss() {
 
 function bossSkill(boss, players) {
   let target = players[Math.floor(Math.random() * players.length)];
-  let skill = Math.floor(Math.random() * 5);
+  let skill = Math.floor(Math.random() * 5); 
 
   switch (skill) {
     case 0:
