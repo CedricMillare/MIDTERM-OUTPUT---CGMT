@@ -1,18 +1,19 @@
 // HEAVILY INSPIRED BY PERSONA GAMES AND BLOCK TALES (ROBLOX)
-// CAINDOY, GAUFO, MILLARE, TAYAG
-// CONSTANTS
+
+// CONSTANTS INITIAL STATS FOR OUR HEROES
 const baseStats = {
-  Warrior: [120, 60],
-  Mage: [80, 120],
-  Paladin: [150, 80],
-  Assassin: [90, 70],
+  Warrior: [1, 60],
+  Mage: [1, 120],
+  Paladin: [1, 80],
+  Assassin: [1, 70],
 };
 
+// AMOUNT OF MANA REDUCED BY SKILL USED
 const skillCost = {
-  Warrior: 30,
+  Warrior: 60,
   Mage: 50,
   Paladin: 80,
-  Assassin: 35,
+  Assassin: 70,
 };
 
 // CHARACTER CLASS
@@ -46,7 +47,7 @@ class Character {
     this.rage = 0;
     this.shield = 0;
   }
-
+  // EXP GAIN AMOUNT AND LEVEL UP FUNCTION
   gainExp(amount) {
     if (this.level >= this.maxLevel) return;
 
@@ -80,8 +81,12 @@ class Character {
     this.mana = Math.min(this.mana + 15, this.maxMana);
 
     alert(`${this.name} attacks ${target.name}! (${target.health} HP left)`);
+    if (target.health <= 0) {
+      alert(`${target.name} has been defeated!`);
+    }
   }
 
+  // HEROES UNIQUE ABILITIES SO FAR
   useSkill(target) {
     const cost = skillCost[this.classType];
     if (this.mana < cost) return alert("Not enough mana!");
@@ -163,11 +168,12 @@ function showPartyStats(players) {
   alert(text);
 }
 
-// ENEMIES
+// ENEMIES (JUST OUR HEROES' COUNTERPARTS)
 const mobTypes = [
   { name: "Goblin", classType: "Assassin" },
   { name: "Orc", classType: "Warrior" },
   { name: "Necromancer", classType: "Mage" },
+  { name: "Fallen Knight", classType: "Paladin" },
 ];
 
 function spawnEnemy() {
@@ -176,7 +182,7 @@ function spawnEnemy() {
 
   let enemy = new Character(mob.name, mob.classType, level);
 
-  alert(`⚔️ A wild ${enemy.name} (Lv.${level}) appeared!`);
+  alert(`A wild ${enemy.name} (Lv.${level}) appeared!`);
   return enemy;
 }
 
@@ -197,24 +203,25 @@ function bossSkill(boss, players) {
 
   switch (skill) {
     case 0:
-      alert("Hellfire!");
+      alert("Demon King uses Hellfire!");
       players.forEach((p) => (p.burn = 2));
       break;
     case 1:
-      alert("Smash!");
+      alert(`Demon King uses Smash on ${target.name}!`);
       target.health -= 350;
       break;
     case 2:
-      alert("Dark Shield!");
+      alert("Demon King applies Dark Shield!");
+      alert("Demon King DEFENSE UP!");
       boss.shield += 200;
       break;
     case 3:
-      alert("Drain!");
+      alert(`Demon King drains ${target.name}'s Soul!`);
       target.health -= 100;
       boss.health += 100;
       break;
     case 4:
-      alert("Doom Strike!");
+      alert(`Demon King uses Doom Strike on ${target.name}!`);
       target.health -= 250;
       break;
   }
@@ -268,8 +275,6 @@ function startBattle(players, enemy, isBoss = false) {
       playerTurn(player, enemy);
 
       if (enemy.health <= 0) {
-        alert(`${enemy.name} defeated!`);
-
         let expGain = enemy.level * 50;
 
         players.forEach((p) => {
@@ -284,7 +289,7 @@ function startBattle(players, enemy, isBoss = false) {
     enemyTurn(players, enemy, isBoss);
 
     if (players.every((p) => p.health <= 0)) {
-      alert("Game Over!");
+      alert("All Players Defeated!");
       return false;
     }
   }
@@ -304,11 +309,18 @@ Gold: ${leader.gold}
   );
 
   if (choice == "1" && leader.gold >= 50) {
+    alert(`Your group gains 1 HP Potion! and lost ${50} gold`);
     leader.gold -= 50;
     players.forEach((p) => p.potions++);
   } else if (choice == "2" && leader.gold >= 50) {
+    alert(`Your group gains 1 Mana Potion! and lost ${50} gold`);
     leader.gold -= 50;
     players.forEach((p) => p.manaPotions++);
+  } else if (choice == 3) {
+    return;
+  } else {
+    alert(`${choice} is an invalid Choice!`);
+    return shop(players);
   }
 }
 
