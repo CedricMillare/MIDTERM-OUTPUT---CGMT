@@ -2,10 +2,10 @@
 
 // CONSTANTS INITIAL STATS FOR OUR HEROES
 const baseStats = {
-  Warrior: [1, 60],
-  Mage: [1, 120],
-  Paladin: [1, 80],
-  Assassin: [1, 70],
+  Warrior: [120, 60],
+  Mage: [80, 120],
+  Paladin: [150, 80],
+  Assassin: [90, 70],
 };
 
 // AMOUNT OF MANA REDUCED BY SKILL USED
